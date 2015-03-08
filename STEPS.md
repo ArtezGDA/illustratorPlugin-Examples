@@ -14,3 +14,5 @@
 - Get bitten by the *recursive duplicate*
 - Fix the recursive bug with extra count variable and place at end
 - Improved place at end.
+- Start simple
+- Fixed 2nd recursive bug (by using targetGroup)
