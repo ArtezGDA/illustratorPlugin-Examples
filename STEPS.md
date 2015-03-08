@@ -12,3 +12,4 @@
 - Study the creation of colors
 - Study the setting of Stroke caps and joins
 - Get bitten by the *recursive duplicate*
+- Fix the recursive bug with extra count variable and place at end
