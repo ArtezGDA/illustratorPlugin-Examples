@@ -35,7 +35,7 @@ Follow the commits to see how it's done.
 ![Step 0](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/step2_duplicate_works.png)
 
 **Step 3: Start Simple**  
-![Step 0](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/step2_duplicate_works.png)
+![Step 0](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/step3_start_simple)
 
 **Step 4: Finished work**  
 ![Finished work](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/step4_finished.png)
