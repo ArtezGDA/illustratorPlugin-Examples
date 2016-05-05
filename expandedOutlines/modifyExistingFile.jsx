@@ -21,8 +21,9 @@ function duplicateOutline(group, compound, strokeW, color) {
 }
 function extraOutlines(objectGroup, strokeW, color) {
 	
+	// For each compound in the group, duplicate it
 	var compounds = objectGroup.compoundPathItems;
-	var numberOfCompounds = compounds.length;
+	var numberOfCompounds = compounds.length; // Prevent recursive loop
 	for (j = 0; j < numberOfCompounds; j++) {
 		$.writeln(compounds[j], compounds.length);
 		var compoundObj = compounds[j];
@@ -31,21 +32,50 @@ function extraOutlines(objectGroup, strokeW, color) {
 	}
 }
 function buildOutlineStack(objectGroup) {
-	$.writeln (objectGroup);
 	var groups  = objectGroup.groupItems;
 	for (i = 0; i < groups.length; i++) {
 		$.writeln (groups[i]);
 		var group = groups[i];
-		
+		var max_stroke = 30;
+		var stroke = 0;
+		stroke = 10
 		var grey = new RGBColor();
-		grey.red = 144;
-		grey.green = 172;
-		grey.blue = 169;
-		extraOutlines(group, 20.0, grey);
+		// Fade from black to white
+		grey.red = (stroke / max_stroke) * 255;
+		grey.green = (stroke / max_stroke) * 255;
+		grey.blue = (stroke / max_stroke) * 255;
+		extraOutlines(group, stroke, grey);
+		
+		stroke = 20
+		var grey = new RGBColor();
+		// Fade from black to white
+		grey.red = (stroke / max_stroke) * 255;
+		grey.green = (stroke / max_stroke) * 255;
+		grey.blue = (stroke / max_stroke) * 255;
+		extraOutlines(group, stroke, grey);
+		
+		/*
+		// Maximum stroke width and steps
+		var max_stroke = 500;
+		var stroke_step = 10;
+		
+		// Repeat the stroke duplicating
+		for (stroke = 0; stroke < max_stroke; stroke += stroke_step) {
+			
+			var grey = new RGBColor();
+			// Fade from black to white
+			grey.red = (stroke / max_stroke) * 255;
+			grey.green = (stroke / max_stroke) * 255;
+			grey.blue = (stroke / max_stroke) * 255;
+			extraOutlines(group, stroke, grey);
+			
+		}
+		*/
 	}
 }
 
+// Get the document
 var doc = app.activeDocument;
 var elements = doc.layers[0];
-$.writeln (elements);
+// build the stack of outlines on the 1st layer
 buildOutlineStack(elements);
