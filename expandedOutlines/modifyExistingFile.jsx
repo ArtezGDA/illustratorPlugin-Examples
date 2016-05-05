@@ -2,9 +2,11 @@
 
 function duplicateOutline(compound, strokeW, color) {
 	// Duplicate the compoundPath
-//	var duplicate = compound.duplicate();
+	var duplicate = compound.duplicate();
 	
-	var duplicate = compound;
+	// Send to back
+	duplicate.move(doc, ElementPlacement.PLACEATEND);
+	
 	// Find the paths of the new compoundPath
 	var paths = duplicate.pathItems;
 	// Stroke and color each path
@@ -20,8 +22,9 @@ function duplicateOutline(compound, strokeW, color) {
 function extraOutlines(objectGroup, strokeW, color) {
 	
 	var compounds = objectGroup.compoundPathItems;
-	for (j = 0; j < compounds.length; j++) {
-		$.writeln(compounds[j]);
+	var numberOfCompounds = compounds.length;
+	for (j = 0; j < numberOfCompounds; j++) {
+		$.writeln(compounds[j], compounds.length);
 		var compoundObj = compounds[j];
 		
 		duplicateOutline(compoundObj, strokeW, color);
