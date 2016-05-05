@@ -1,13 +1,19 @@
 /* Expand Outlines - Multiple */
 
 function duplicateOutline(compound, strokeW, color) {
-	var paths = compound.pathItems;
-	$.writeln (paths.length);
+	// Duplicate the compoundPath
+//	var duplicate = compound.duplicate();
+	
+	var duplicate = compound;
+	// Find the paths of the new compoundPath
+	var paths = duplicate.pathItems;
+	// Stroke and color each path
 	for (k = 0; k < paths.length; k++) {
-		$.writeln(paths[k]);
 		var path = paths[k];
 		path.strokeColor = color;
 		path.fillColor = color;
+		path.strokeCap = StrokeCap.ROUNDENDCAP;
+		path.strokeJoin = StrokeJoin.ROUNDENDJOIN;
 		path.strokeWidth = strokeW;
 	}
 }
