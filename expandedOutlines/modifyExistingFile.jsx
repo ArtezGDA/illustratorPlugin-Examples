@@ -1,11 +1,11 @@
 /* Expand Outlines - Multiple */
 
-function duplicateOutline(compound, strokeW, color) {
+function duplicateOutline(group, compound, strokeW, color) {
 	// Duplicate the compoundPath
 	var duplicate = compound.duplicate();
 	
 	// Send to back
-	duplicate.move(doc, ElementPlacement.PLACEATEND);
+	duplicate.move(group, ElementPlacement.PLACEATEND);
 	
 	// Find the paths of the new compoundPath
 	var paths = duplicate.pathItems;
@@ -27,7 +27,7 @@ function extraOutlines(objectGroup, strokeW, color) {
 		$.writeln(compounds[j], compounds.length);
 		var compoundObj = compounds[j];
 		
-		duplicateOutline(compoundObj, strokeW, color);
+		duplicateOutline(objectGroup, compoundObj, strokeW, color);
 	}
 }
 function buildOutlineStack(objectGroup) {
