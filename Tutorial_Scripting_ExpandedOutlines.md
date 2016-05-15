@@ -1,5 +1,9 @@
 # Scripting Tutorial to Expanded Outlines
 
+The final version of the script can be found here: [Expanded Outlines](https://github.com/ArtezGDA/illustratorPlugin-Examples/tree/master/expandedOutlines)
+
+----
+
 **Step 0: Start**  
 ![Step 0](screenshots/step0_start.png)
 
