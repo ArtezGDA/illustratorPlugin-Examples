@@ -11,8 +11,9 @@ if ( app.documents.length > 0 ) {
 		// Print all layers
 		for (var i = 0; i < layers.length; i++) {
 			
-			$.writeln(i);
-			$.writeln(layers[i]);
+			// Print the name of the layer
+			var theLayer = layers[i];
+			$.writeln(theLayer.name)
 		}
 	}
 }
