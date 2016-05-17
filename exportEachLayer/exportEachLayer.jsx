@@ -44,6 +44,9 @@ if ( app.documents.length > 0 ) {
 			exportOptions.embedAllFonts = false;
 			exportOptions.fontSubsetting = SVGFontSubsetting.GLYPHSUSED;
 			newDoc.exportFile( fileSpec, type, exportOptions );
+			
+			// Clean up: close the document
+			newDoc.close();
 		}
 	}
 }

@@ -111,3 +111,9 @@ Read the code under the heading "**Exporting to SVG format**" in Adobe's Javascr
 			exportOptions.fontSubsetting = SVGFontSubsetting.GLYPHSUSED;
 			newDoc.exportFile( fileSpec, type, exportOptions );
 ```
+
+### 10. Clean up: close the new document
+
+```javascript
+			newDoc.close();
+```
