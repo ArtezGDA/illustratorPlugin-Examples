@@ -30,6 +30,12 @@ if ( app.documents.length > 0 ) {
 					var newItem = pageItem.duplicate(newDoc, ElementPlacement.PLACEATEND);
 				}
 			}
+			
+			// Create a new name for the svg file to export
+			var docPath = doc.path;
+			svgFilePath = docPath + "/" + theLayer.name + ".svg";
+			
+			$.writeln(svgFilePath);
 		}
 	}
 }

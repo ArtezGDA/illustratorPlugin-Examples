@@ -75,6 +75,31 @@ Read the section about the **pageItems** property of a **Layer**, under **Layer 
 			}
 ```
 
+### 7. Study how to export SVG files
+
+Read the code under the heading "**Exporting to SVG format**" in Adobe's Javascript Reference.
+
+### 8. Print the path of the current file and format a new path name
+
+```javascript
+			// Print the path of the Illustrator document
+			
+			var docPath = doc.path;
+			svgFilePath = docPath + "/hello.svg";
+			
+			$.writeln(docPath);
+			$.writeln(svgFilePath);
+```
+
+```javascript
+			// Create a new name for the svg file to export
+			var docPath = doc.path;
+			svgFilePath = docPath + "/" + theLayer.name + ".svg";
+			
+			$.writeln(svgFilePath);
+```
+
+### 9. 
 
 ```javascript
 ```
