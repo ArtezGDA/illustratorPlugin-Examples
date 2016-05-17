@@ -13,7 +13,6 @@ if ( app.documents.length > 0 ) {
 			
 			// Print the name of the layer
 			var theLayer = layers[i];
-			$.writeln(theLayer.name);
 			
 			// Create a new document
 			var newDoc = app.documents.add();
@@ -36,6 +35,15 @@ if ( app.documents.length > 0 ) {
 			svgFilePath = docPath + "/" + theLayer.name + ".svg";
 			
 			$.writeln(svgFilePath);
+			
+			// Export the new document as SVG
+			var exportOptions = new ExportOptionsSVG();
+			var type = ExportType.SVG;
+			var fileSpec = new File(svgFilePath);
+			exportOptions.embedRasterImages = true;
+			exportOptions.embedAllFonts = false;
+			exportOptions.fontSubsetting = SVGFontSubsetting.GLYPHSUSED;
+			newDoc.exportFile( fileSpec, type, exportOptions );
 		}
 	}
 }

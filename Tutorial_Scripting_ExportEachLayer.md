@@ -99,7 +99,15 @@ Read the code under the heading "**Exporting to SVG format**" in Adobe's Javascr
 			$.writeln(svgFilePath);
 ```
 
-### 9. 
+### 9. Export the new document as SVG
 
 ```javascript
+			// Export the new document as SVG
+			var exportOptions = new ExportOptionsSVG();
+			var type = ExportType.SVG;
+			var fileSpec = new File(svgFilePath);
+			exportOptions.embedRasterImages = true;
+			exportOptions.embedAllFonts = false;
+			exportOptions.fontSubsetting = SVGFontSubsetting.GLYPHSUSED;
+			newDoc.exportFile( fileSpec, type, exportOptions );
 ```
