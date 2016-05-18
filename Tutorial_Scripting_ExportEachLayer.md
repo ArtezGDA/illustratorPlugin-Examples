@@ -47,13 +47,22 @@ if ( app.documents.length > 0 ) {
 			$.writeln(theLayer.name);
 ```
 
+**Step 3: Log the name of each layer**  
+![Step 3](screenshots/export_step3_log_each_name.png)
+
 ### 4. Study how to create a new document
 
 Read the code under the heading "**Duplicating the active document**" in Adobe's Javascript Reference.
 
+**Step 4: Study Duplicating the active document**  
+![Step 4](screenshots/export_step4_study_duplicate.png)
+
 ### 5. Study the properties and functions of a layer
 
 Read the section about the **pageItems** property of a **Layer**, under **Layer properties**.
+
+**Step 5: Study properties of the "Layer" object**  
+![Step 5](screenshots/export_step5_study_layer.png)
 
 ### 6. Copy each layer into its own document
 
@@ -75,9 +84,15 @@ Read the section about the **pageItems** property of a **Layer**, under **Layer 
 			}
 ```
 
+**Step 6: Duplicate each object in each layer**  
+![Step 6](screenshots/export_step6_duplicate_each_layer.png)
+
 ### 7. Study how to export SVG files
 
 Read the code under the heading "**Exporting to SVG format**" in Adobe's Javascript Reference.
+
+**Step 7: Study export to SVG**  
+![Step 7](screenshots/export_step7_study_export_svg.png)
 
 ### 8. Print the path of the current file and format a new path name
 
@@ -117,3 +132,7 @@ Read the code under the heading "**Exporting to SVG format**" in Adobe's Javascr
 ```javascript
 			newDoc.close();
 ```
+
+**Step 10: Result: exported SVG files**  
+![Step 10](screenshots/export_step10_result.png)
+
