@@ -1,0 +1,52 @@
+{
+	"exampleArray": [
+		{
+			"month": "January",
+			"value": 12
+		},
+		{
+			"month": "February",
+			"value": 15
+		},
+		{
+			"month": "March",
+			"value": 28
+		},
+		{
+			"month": "April",
+			"value": 24
+		},
+		{
+			"month": "May",
+			"value": 35
+		},
+		{
+			"month": "June",
+			"value": 56
+		},
+		{
+			"month": "July",
+			"value": 78
+		},
+		{
+			"month": "August",
+			"value": 82
+		},
+		{
+			"month": "September",
+			"value": 65
+		},
+		{
+			"month": "October",
+			"value": 42
+		},
+		{
+			"month": "November",
+			"value": 33
+		},
+		{
+			"month": "December",
+			"value": 19
+		},
+	]
+}
