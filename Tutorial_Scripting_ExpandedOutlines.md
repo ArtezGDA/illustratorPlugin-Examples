@@ -40,22 +40,51 @@ $.writeln (elements);
 **Step 3.1: Investigate the layers**  
 ![Step 3.1](screenshots/step0_illustrator_layers.png)
 
+**Step 3.2: Printing the group(layer)**  
+
 ```diff
-@@ -5,8 +5,14 @@ function duplicateOutline(obj, strokeW, color) {
- function extraOutlines(objectGroup, strokeW, color) {
- }
- function buildOutlineStack(objectGroup) {
+function duplicateOutline(obj, strokeW, color) {
+function extraOutlines(objectGroup, strokeW, color) {
+}
+function buildOutlineStack(objectGroup) {
 +		$.writeln (objectGroup);
 +		var groups  = objectGroup.groupItems;
 +		for (i = 0; i < groups.length; i++) {
 +			$.writeln (groups[i]);
 +		}
- }
+}
  
- var doc = app.activeDocument;
- var elements = doc.layers[0];
- $.writeln (elements);
+var doc = app.activeDocument;
+var elements = doc.layers[0];
+$.writeln (elements);
 +buildOutlineStack(elements);
+```
+
+**Step 3.3: Adding strokes on all objects. Start of real work.**  
+
+```diff
+function buildOutlineStack(objectGroup) {
+		var groups  = objectGroup.groupItems;
+		for (i = 0; i < groups.length; i++) {
+			$.writeln (groups[i]);
++			var group = groups[i];
++			
++			var compounds = group.compoundPathItems;
++			for (j = 0; j < compounds.length; j++) {
++				$.writeln(compounds[j]);
++				var compound = compounds[j];
++				
++				var paths = compound.pathItems;
++				$.writeln (paths.length);
++				for (k = 0; k < paths.length; k++) {
++					$.writeln(paths[k]);
++					var path = paths[k];
++					path.strokeColor = path.fillColor;
++					path.strokeWidth = 25.0;
++				}
++			}
+		}
+}
 ```
 
 ### 4. Study the creation of colors
@@ -63,9 +92,79 @@ $.writeln (elements);
 **Step 4: Create grey outlines**  
 ![Step 4](screenshots/step1_grey_outlines.png)
 
+
 ### 5. Study the setting of Stroke caps and joins
 
+**Step 5.1: adding greyish stroke. (Still is much easier done in Illustrator itself)**
+
+```diff
+/* Expand Outlines - Multiple */
+
+-function duplicateOutline(obj, strokeW, color) {
++function duplicateOutline(compound, strokeW, color) {
++	var paths = compound.pathItems;
++	$.writeln (paths.length);
++	for (k = 0; k < paths.length; k++) {
++		$.writeln(paths[k]);
++		var path = paths[k];
++		path.strokeColor = color;
++		path.fillColor = color;
++		path.strokeWidth = strokeW;
++	}
+}
+function extraOutlines(objectGroup, strokeW, color) {
++	
++	var compounds = objectGroup.compoundPathItems;
++	for (j = 0; j < compounds.length; j++) {
++		$.writeln(compounds[j]);
++		var compoundObj = compounds[j];
++		
++		duplicateOutline(compoundObj, strokeW, color);
++	}
+}
+function buildOutlineStack(objectGroup) {
+-		$.writeln (objectGroup);
+-		var groups  = objectGroup.groupItems;
+-		for (i = 0; i < groups.length; i++) {
+-			$.writeln (groups[i]);
+-			var group = groups[i];
+-			
+-			var compounds = group.compoundPathItems;
+-			for (j = 0; j < compounds.length; j++) {
+-				$.writeln(compounds[j]);
+-				var compound = compounds[j];
+-				
+-				var paths = compound.pathItems;
+-				$.writeln (paths.length);
+-				for (k = 0; k < paths.length; k++) {
+-					$.writeln(paths[k]);
+-					var path = paths[k];
+-					path.strokeColor = path.fillColor;
+-					path.strokeWidth = 25.0;
+-				}
+-			}
+-		}
++	$.writeln (objectGroup);
++	var groups  = objectGroup.groupItems;
++	for (i = 0; i < groups.length; i++) {
++		$.writeln (groups[i]);
++		var group = groups[i];
++		
++		var grey = new RGBColor();
++		grey.red = 144;
++		grey.green = 172;
++		grey.blue = 169;
++		extraOutlines(group, 20.0, grey);
++	}
+}
+
+var doc = app.activeDocument;
+```
+
 ### 6. Get bitten by the ***recursive duplication trap***
+
+```diff
+```
 
 ### 7. Fix the recursive bug with extra count variable and place at end
 
@@ -74,6 +173,9 @@ $.writeln (elements);
 
 **Step 7.1: Duplication works**  
 ![Step 7.1](screenshots/step2_duplicate_works.png)
+
+```diff
+```
 
 ### 8. Improved place at end.
 
