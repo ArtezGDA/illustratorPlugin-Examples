@@ -100,8 +100,12 @@ if ( app.documents.length > 0 ) {
 +           textObj.contents = "New text"
 ```
 
+### 6. Study reading from JSON
+
 ```javascript
 ```
+
+### 7. Read from JSON and modify the text
 
 ```javascript
 ```
