@@ -79,7 +79,18 @@ if ( app.documents.length > 0 ) {
 }
 ```
 
-```javascript
+### 4. Print all texts in the textLayer
+
+```diff
+   var textLayer = getLayerNamed(doc, "TextLayer");
+-   $.writeln(textLayer);
++   
++   // Print all texts in the textLayer
++   var textObjects = textLayer.textFrames;
++   if ( textObjects.length > 0 ) {
++       for (var i = 0; i < textObjects.length; i++) {
++           var textObj = textObjects[i];
++           
 ```
 
 ```javascript
