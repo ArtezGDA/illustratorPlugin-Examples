@@ -1,19 +1,30 @@
 // Import JSON Data into Illustrator
 
+// Returns the layer with the given name
+function getLayerNamed(doc, nameOfTheLayer) {
+	
+	// Only search the document if it is given
+	if ( doc != undefined ) {
+		
+		// Get the layer with the given name 
+		var layers = doc.layers;
+		if ( layers.length > 0 ) {
+			for (var i = 0; i < layers.length; i++) {
+				var layer = layers[i];
+			
+				if ( layer.name == nameOfTheLayer ) {
+					return layer;
+				}
+			}
+		}
+	}
+	return null;
+}
+
 // Get the active document
 if ( app.documents.length > 0 ) {
 	var doc = app.activeDocument;
 	
-	// Get the text layer
-	var layers = doc.layers;
-	if ( layers.length > 0 ) {
-		for (var i = 0; i < layers.length; i++) {
-			var layer = layers[i];
-			$.writeln(layer.name);
-			
-			if ( layer.name == "TextLayer" ) {
-				$.writeln(layer);
-			}
-		}
-	}
+	var textLayer = getLayerNamed(doc, "TextLayer");
+	$.writeln(textLayer);
 }
