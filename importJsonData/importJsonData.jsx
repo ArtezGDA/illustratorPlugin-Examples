@@ -33,7 +33,7 @@ if ( app.documents.length > 0 ) {
 	var textObjects = textLayer.textFrames;
 	if ( textObjects.length > 0 ) {
 		for (var i = 0; i < textObjects.length; i++) {
-			var textObj = textObjects[i];
+			var textObj = textObjects[textObjects.length - (i + 1)];
 			
 			$.writeln(textObj.contents);
 			textObj.contents = "New text" + i.toString();
