@@ -93,7 +93,11 @@ if ( app.documents.length > 0 ) {
 +           
 ```
 
-```javascript
+### 5. Modify the texts
+
+```diff
+           $.writeln(textObj.contents)
++           textObj.contents = "New text"
 ```
 
 ```javascript

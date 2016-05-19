@@ -34,6 +34,7 @@ if ( app.documents.length > 0 ) {
 			var textObj = textObjects[i];
 			
 			$.writeln(textObj.contents)
+			textObj.contents = "New text"
 		}
 	}
 }
