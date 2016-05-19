@@ -9,7 +9,11 @@ if ( app.documents.length > 0 ) {
 	if ( layers.length > 0 ) {
 		for (var i = 0; i < layers.length; i++) {
 			var layer = layers[i];
-			$.writeln(layer.name)
+			$.writeln(layer.name);
+			
+			if ( layer.name == "TextLayer" ) {
+				$.writeln(layer);
+			}
 		}
 	}
 }
