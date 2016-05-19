@@ -1,5 +1,7 @@
 // Import JSON Data into Illustrator
 
+// #include "json2.js"
+
 // Returns the layer with the given name
 function getLayerNamed(doc, nameOfTheLayer) {
 	
@@ -33,8 +35,8 @@ if ( app.documents.length > 0 ) {
 		for (var i = 0; i < textObjects.length; i++) {
 			var textObj = textObjects[i];
 			
-			$.writeln(textObj.contents)
-			textObj.contents = "New text"
+			$.writeln(textObj.contents);
+			textObj.contents = "New text" + i.toString();
 		}
 	}
 }
