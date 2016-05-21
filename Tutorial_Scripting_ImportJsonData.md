@@ -167,6 +167,9 @@ From the previous screenhot we can observe that the order is exactly the reverse
            $.writeln(textObj.contents);
 ```
 
+**Step 7.1: Reverse the order in which the texts are changed**  
+![Step 7.1](screenshots/import_step7_reverse_order_of_modify_texts.png)
+
 ### 8. Study reading from JSON
 
 According to FabianTheBlind [Eval is Evil](https://github.com/fabiantheblind/extendscript/wiki/Read-In-JSON-From-File-And-DONT-Eval). He explains the proper way how to read from a JSON file.
