@@ -181,7 +181,7 @@ The only alternative which works for me, is to resort to the "*dangerous*" `eval
 
 Add an example JSON file somewhere on your computer:
 
-`example.json`:
+[`example.json`](importJsonData/example.json):
 
 ```json
 {	"foo": "Hello World",
@@ -189,7 +189,7 @@ Add an example JSON file somewhere on your computer:
 }
 ```
 
-Then append this to your script:
+Then append this to your script. *Of course you will have to change the path to the* example.json *file to the path on your computer.* 
 
 ```javascript
 // JSON reading
@@ -215,10 +215,78 @@ $.writeln(jsonData.bar);
 **Step 8.2: The successful result from reading the JSON in the Javascript Console**  
 ![Step 8.2](screenshots/import_step8_reading_json.png)
 
-### 9. Read from JSON and modify the text
+### 9. Read an array from JSON
 
-```javascript
+Now let's head over to our (real) data file and import this file instead of the extreme simple example of above.
+
+Actually, this is still sample data but for the purpose of drawing a graph it will do fine. The json contains a list of 12 months with a value for each months.
+
+[`arrayOfMonths.json`](importJsonData/arrayOfMonths.json):
+
+```json
+{
+	"exampleArray": [
+		{
+			"month": "January",
+			"value": 12
+		},
+		{
+			"month": "February",
+			"value": 15
+		},
+...
 ```
 
+Change the script to import this new file:
+
+```diff
+
+// JSON reading
+-var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/example.json");
++var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/arrayOfMonths.json");
+var jsonData = null;
+if ( fileToRead !== false ) {
+```
+
+```diff
+}
+
+-// Print some data from the JSON
+-$.writeln(jsonData.foo);
+-$.writeln(jsonData.bar);
++// Print number of months in the JSON array
++$.writeln(jsonData.exampleArray.length);
+```
+
+### 10. Refactor the JSON reading into a function
+
+Because we are only interested in getting this array, let's move all the code necessary to get to that array into its own function. Functionally this step won't change the behavior of our code a single bit, but after this '*refactor*' (restructuring the code, while the functionality stays the same), it will be much easier to read.
+
+What we would like to have is a function that just returns the array
+
 ```javascript
+// Returns an array of 12 months
+function getMonthsArray() {
+	// JSON reading
+	var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/arrayOfMonths.json");
+	var jsonData = null;
+	if ( fileToRead !== false ) {
+		// Open the file and read the content
+		fileToRead.open('r');
+		content = fileToRead.read();
+		// modify the content so it will set the jsonData variable
+		content = "jsonData = " + content + ";";
+		// eval is evil, but other tricks didn't seem to work
+		eval(content);
+		// Close the file
+		fileToRead.close();
+	}
+	return jsonData.exampleArray
+}
+```
+
+Then when we want to get the array we can just get it and appoint it to a variable
+
+```javascript
+var months = getMonthsArray();
 ```

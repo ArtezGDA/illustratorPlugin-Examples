@@ -21,6 +21,26 @@ function getLayerNamed(doc, nameOfTheLayer) {
 	return null;
 }
 
+// Returns an array of 12 months
+function getMonthsArray() {
+	// JSON reading
+	var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/arrayOfMonths.json");
+	var jsonData = null;
+	if ( fileToRead !== false ) {
+		// Open the file and read the content
+		fileToRead.open('r');
+		content = fileToRead.read();
+		// modify the content so it will set the jsonData variable
+		content = "jsonData = " + content + ";";
+		// eval is evil, but other tricks didn't seem to work
+		eval(content);
+		// Close the file
+		fileToRead.close();
+	}
+	return jsonData.exampleArray
+}
+
+
 // Get the active document
 if ( app.documents.length > 0 ) {
 	var doc = app.activeDocument;
@@ -39,21 +59,7 @@ if ( app.documents.length > 0 ) {
 	}
 }
 
-// JSON reading
-var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/example.json");
-var jsonData = null;
-if ( fileToRead !== false ) {
-	// Open the file and read the content
-	fileToRead.open('r');
-	content = fileToRead.read();
-	// modify the content so it will set the jsonData variable
-	content = "jsonData = " + content + ";";
-	// eval is evil, but other tricks didn't seem to work
-	eval(content);
-	// Close the file
-	fileToRead.close();
-}
-
-// Print some data from the JSON
-$.writeln(jsonData.foo);
-$.writeln(jsonData.bar);
+// Get the months
+var months = getMonthsArray();
+// Print number of months in the JSON array
+$.writeln(months.length);
