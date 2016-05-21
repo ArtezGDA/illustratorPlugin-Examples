@@ -159,37 +159,61 @@ Just to get a feeling of the order of the elements and which one is the first on
 From the previous screenhot we can observe that the order is exactly the reverse of what is intended. This reverse order is due to the way of duplicating items in Illustrator: the new duplicated item is placed on top. Because we intented a reverse order: it should start at the top and then increment clockwise, we need to reverse the order of modified textFrames. We could do this by reversing the order of textFrame layers in Illustrator or by modifying our script. We'll do the latter:
 
 ```diff
+   if ( textObjects.length > 0 ) {
+       for (var i = 0; i < textObjects.length; i++) {
+-           var textObj = textObjects[i];
++           var textObj = textObjects[textObjects.length - (i + 1)];
+           
+           $.writeln(textObj.contents);
 ```
-
-
 
 ### 8. Study reading from JSON
 
-FabianTheBlind's wiki lists an excellent page about [reading from JSON](https://github.com/fabiantheblind/extendscript/wiki/Read-In-JSON-From-File-And-DONT-Eval). It all boils down to this:
+According to FabianTheBlind [Eval is Evil](https://github.com/fabiantheblind/extendscript/wiki/Read-In-JSON-From-File-And-DONT-Eval). He explains the proper way how to read from a JSON file.
 
-- download https://raw.githubusercontent.com/douglascrockford/JSON-js/master/json2.js as `json2.js`
-- use the following code to read the JSON:
+However, this method didn't work for me, and gives a parsing error. Maybe this has to do with the old version of Illustrator that I am using, so there might be fixes. But I had to look for an alternative.
+
+The only alternative which works for me, is to resort to the "*dangerous*" `eval` method.
+
+(`Eval` is considered dangerous, because it will execute any code it will find in the (json) file to read. So if you don't control your own json, you better not use the following.)
+
+**Step 8.1: Load some JSON data with the `eval` method**  
+
+Add an example JSON file somewhere on your computer:
+
+`example.json`:
+
+```json
+{	"foo": "Hello World",
+	"bar": 42
+}
+```
+
+Then append this to your script:
 
 ```javascript
-#include "json2.js"
+// JSON reading
+var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/example.json");
+var jsonData = null;
+if ( fileToRead !== false ) {
+	// Open the file and read the content
+	fileToRead.open('r');
+	content = fileToRead.read();
+	// modify the content so it will set the jsonData variable
+	content = "jsonData = " + content + ";";
+	// eval is evil, but other tricks didn't seem to work
+	eval(content);
+	// Close the file
+	fileToRead.close();
+}
 
-    var script_file = File($.fileName); // get the location of the script file
-    var script_file_path = script_file.path; // get the path
-    var file_to_read = File(script_file_path + "/theData.json");
-	
-    var my_JSON_object = null; // create an empty variable
-    var content; // this will hold the String content from the file
-	
-    if(file_to_read !== false){// if it is really there
-          file_to_read.open('r'); // open it
-          content = file_to_read.read(); // read it
-          my_JSON_object =  JSON.parse(content);// now evaluate the string from the file
-          alert(my_JSON_object.toSource()); // if it all went fine we have now a JSON Object instead of a string call length
-          file_to_read.close(); // always close files after reading
-          }else{
-          alert("Bah!"); // if something went wrong
-    }
+// Print some data from the JSON
+$.writeln(jsonData.foo);
+$.writeln(jsonData.bar);
 ```
+
+**Step 8.2: The successful result from reading the JSON in the Javascript Console**  
+![Step 8.2](screenshots/import_step8_reading_json.png)
 
 ### 9. Read from JSON and modify the text
 
