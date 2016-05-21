@@ -290,3 +290,62 @@ Then when we want to get the array we can just get it and appoint it to a variab
 ```javascript
 var months = getMonthsArray();
 ```
+
+### 11. Use the array to change the texts
+
+So now we can use this array to change the texts.
+
+**Step 11.1: Get the array of months (within the block if it has texts to change)**
+
+```diff
+    var textObjects = textLayer.textFrames;
+    if ( textObjects.length > 0 ) {
++       
++       // Get the months
++       var months = getMonthsArray();
++
+        for (var i = 0; i < textObjects.length; i++) {
+            var textObj = textObjects[textObjects.length - (i + 1)];
+```
+
+**Step 11.2: Wrap the for loop in an `if` that only executes if the number of texts matches the number of months**
+
+```diff
++       // Check if the number of textObjects is equal to the number of months
++       if ( textObjects.length == months.length ) {
++           
+            for (var i = 0; i < textObjects.length; i++) {
+                var textObj = textObjects[textObjects.length - (i + 1)];
+            
+				$.writeln(textObj.contents);
+				textObj.contents = "New text" + i.toString();
+            }
++       } else {
++
++           // If the number of the texts is not equal to the number of months, alert the user
++           alert("the number of textFrames and number of months in the JSON do not match.");
++       }
+    }
+```
+
+Technically, it is possible to also change the text frames when the number of text frames and months do not match. (If there are more months than textFrames, just ignore the superfluos data. If there are more textFrames than months, leave the extra textFrames untouched). But that requires more checks and more code. In this case we know that they match, so go for the easy way.
+
+**Step 11.3: Use the actual data -the month name- to change the texts**
+
+```diff
+			for (var i = 0; i < textObjects.length; i++) {
+				var textObj = textObjects[textObjects.length - (i + 1)];
+			
++				// Change the text into the month
++				var thisMonth = months[i];
++				textObj.contents = thisMonth.month;
+			}
+		} else {
+```
+
+**Step 11.4: The result from reading an example JSON file and modifying the texts to the names of months**  
+![Step 11.4](screenshots/import_step11_reading_months.png)
+
+### Investigate the points of the path 
+
+...

@@ -47,19 +47,27 @@ if ( app.documents.length > 0 ) {
 	
 	var textLayer = getLayerNamed(doc, "TextLayer");
 	
-	// Print all texts in the textLayer
+	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
 	if ( textObjects.length > 0 ) {
-		for (var i = 0; i < textObjects.length; i++) {
-			var textObj = textObjects[textObjects.length - (i + 1)];
+		
+		// Get the months
+		var months = getMonthsArray();
+		
+		// Check if the number of textObjects is equal to the number of months
+		if ( textObjects.length == months.length ) {
 			
-			// $.writeln(textObj.contents);
-			// textObj.contents = "New text" + i.toString();
+			for (var i = 0; i < textObjects.length; i++) {
+				var textObj = textObjects[textObjects.length - (i + 1)];
+			
+				// Change the text into the month
+				var thisMonth = months[i];
+				textObj.contents = thisMonth.month;
+			}
+		} else {
+			
+			// If the number of the texts is not equal to the number of months, alert the user
+			alert("the number of textFrames and number of months in the JSON do not match.");
 		}
 	}
 }
-
-// Get the months
-var months = getMonthsArray();
-// Print number of months in the JSON array
-$.writeln(months.length);
