@@ -46,7 +46,27 @@ if ( app.documents.length > 0 ) {
 	var doc = app.activeDocument;
 	
 	var textLayer = getLayerNamed(doc, "TextLayer");
+	var pathLayer = getLayerNamed(doc, "ShapeLayer")
 	
+	// Print the pathItems of the pathLayer
+	$.writeln(pathLayer.pathItems);
+	
+	// Print the first (and only) pathItem
+	$.writeln(pathLayer.pathItems[0]);
+	
+	// Make this PathItem into a variable
+	var polygonPath = pathLayer.pathItems[0];
+	
+	// Print the number of pathPoints in this PathItem 
+	$.writeln(polygonPath.pathPoints.length);
+	
+	// For experimentation, get the first point
+	var firstPoint = polygonPath.pathPoints[0];
+	
+	// Print the anchor (which is a coordinate) and the pointType
+	$.writeln(firstPoint.anchor);
+	$.writeln(firstPoint.pointType);
+			
 	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
 	if ( textObjects.length > 0 ) {
