@@ -66,6 +66,10 @@ if ( app.documents.length > 0 ) {
 	// Print the anchor (which is a coordinate) and the pointType
 	$.writeln(firstPoint.anchor);
 	$.writeln(firstPoint.pointType);
+	
+	// Modify the coordinates of the first anchor
+	// (300.0, 500.0) is the center of the drawing
+	firstPoint.anchor = [300.0, 500.0];
 			
 	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
