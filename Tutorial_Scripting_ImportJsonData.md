@@ -349,6 +349,147 @@ Technically, it is possible to also change the text frames when the number of te
 **Step 11.4: The result from reading an example JSON file and modifying the texts to the names of months**  
 ![Step 11.4](screenshots/import_step11_reading_months.png)
 
-### Investigate the points of the path 
+### 12. Investigate the points of the path 
 
-...
+Now we modified the Illustrator document to show a nice list of months, let's focus on the polygon path.
+
+The layer called "ShapeLayer" contains a single object, a *path*, with 12 points. 
+
+**Step 12.0: Investigate the polygon path**  
+![Step 12.0](screenshots/import_step12_investigate_polygon.png)
+
+Let's see how we can access those through code. Begin by getting the shape layer. We can use the function `getLayerNamed` that we created earlier.
+
+**Step 12.1: Begin by getting the shape layer**
+
+```javascript
+	var pathLayer = getLayerNamed(doc, "ShapeLayer")
+```
+
+Then get to the path in this layer. From the Reference about the object *Layer*, we see that there is the property `pathItems` which we could use:
+
+**Step 12.2: Layer Reference: the pathItems property**  
+![Step 12.2](screenshots/import_step12_2_pathItems_reference.png)
+
+This will give us *PathItems*, a collection of *PathItem*(s). Studying the *PathItem* teaches us that there is read-only property `pathPoints`, returning a list, *PathPoints*.
+
+**Step 12.3: PathItem Reference: the pathPoints property**  
+![Step 12.2](screenshots/import_step12_3_pathPoints_reference.png)
+
+The *PathPoints* is a collection of multiple *PathPoint*(s). And if we study its reference we find just a few properties each point has, the `anchor` probably being most notable: the location of the point.
+
+**Step 12.4: PathPoint Reference**  
+![Step 12.4](screenshots/import_step12_4_pathPoint_reference.png)
+
+So now we know how to access these properties. Let's just get the first point of the polygon, and see if we can access some of its properties:
+
+```javascript
+	// Print the pathItems of the pathLayer
+	$.writeln(pathLayer.pathItems);
+	
+	// Print the first (and only) pathItem
+	$.writeln(pathLayer.pathItems[0]);
+```
+
+**Step 12.5: Getting the PathItem**  
+![Step 12.5](screenshots/import_step12_5_get_the_PathItem.png)
+
+We have the *PathItem*. Now count its *pathPoints*:
+
+```javascript
+	// Make this PathItem into a variable
+	var polygonPath = pathLayer.pathItems[0];
+	
+	// Print the number of pathPoints in this PathItem 
+	$.writeln(polygonPath.pathPoints.length);
+```
+
+**Step 12.6: Count the pathPoints**  
+![Step 12.6](screenshots/import_step12_6_count_the_pathPoints.png)
+
+Yeah, **12** points! So far so good.
+
+Now let's just take the *first* point of those twelve and read some of its properties. Whenever you're trying to manipulate a bunch of things, it is often easier just to try it with one or a few first, to see how they hold up, before you attempt it on the lot.
+
+```javascript
+	// For experimentation, get the first point
+	var firstPoint = polygonPath.pathPoints[0];
+	
+	// Print the anchor (which is a coordinate) and the pointType
+	$.writeln(firstPoint.anchor);
+	$.writeln(firstPoint.pointType);
+```
+
+**Step 12.7: Investigate the first point**  
+![Step 12.7](screenshots/import_step12_7_investigate_first_point.png)
+
+So, indeed the the `anchor` is a list of coordinates, and the `pointType` is a `PointType.CORNER`.
+
+### 13. Investigate further: manipulate the points in the path
+
+Printing out stuff to the console is just one part of an investigation. If you really want to understand how stuff is working, you should take it apart, tweak it, poke it with a stick and see how it reacts. So let's.
+
+Manipulate the anchor. The documentation says the anchor should be an *array of 2 numbers*. So that's what we should set it to. I'm gonna set the coordinates of the anchor to the center of the shape, as if the value of this point would be 0:
+
+```javascript
+	// Modify the coordinates of the first anchor
+	// (300.0, 500.0) is the center of the drawing
+	firstPoint.anchor = [300.0, 500.0];
+```
+
+**Step 13.1: Manipulate the first point**  
+![Step 13.1](screenshots/import_step13_1_manipulate_the_first_point.png)
+
+A few things to be noticed:
+
+- The manipulated point is not the first point at the top (what we might were expecting), but a point somewhere halfway down. This is probably due to the way I have been drawing the polygon in the first place and where I have been holding the mouse. That wasn't important before, but now turns out to matter.
+- The lines coming from the point are not straight, there seem to be a *curve* toward its neighboring points. This is also something we'll need to fix.
+
+Firstly, we're going to concentrate on this last aspect. Curve lines might be nicer that straight lines. But curved lines will also be harder to control than straight lines. So today we're going to make them straight. And maybe someday later, we'll figure out how to make them nice and curved.
+
+So straight is what we want, but do not get. What is wrong here?
+
+**Step 13.2: Why the Curved lines?**  
+![Step 13.2](screenshots/import_step13_2_why_the_curved_lines.png)
+
+Investigating the curve and its bendpoints further, it seems that the *control points*, both *in* and *out* control points were not moved accordingly to the script, but did just stay at their original position.
+
+We can change this by also setting the control points to these same coordinates as the moved anchor.
+
+```javascript
+	firstPoint.anchor = [300.0, 500.0];
+	firstPoint.leftDirection = [300.0, 500.0];
+	firstPoint.rightDirection = [300.0, 500.0];
+```
+
+**Step 13.3: Setting the whole corner: both the anchor and its control points**  
+![Step 13.3](screenshots/import_step13_3_set_anchor_and_control_points.png)
+
+Then onto the starting position (and direction) of the drawing. We could try to fix this problem in code. But it will probably be much easier if we're just adjusting the starting point of the polygon by rotating it using Illustrator's interface:
+
+**Step 13.4: First corner at the top**  
+![Step 13.4](screenshots/import_step13_4_the_first_corner_at_the_top.png)
+
+There is last more thing we need to find out during this investigation step: What is the direction of polygon? (I.e. in which direction will you be following the corner points?)
+
+Try to set the second point to the center as well.
+
+```javascript
+	// Modify the second point to investigate the direction
+	var secondPoint = polygonPath.pathPoints[1];
+	secondPoint.anchor = [300.0, 500.0];
+```
+
+**Step 13.5: Manipulate the second point to learn about direction**  
+![Step 13.5](screenshots/import_step13_5_manipulate_the_content.png)
+
+Nice, the direction is the the same as prefered, so we do not need to change something about that.
+
+### 14.
+
+```javascript
+```
+
+
+```javascript
+```

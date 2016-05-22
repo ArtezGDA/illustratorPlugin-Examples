@@ -74,6 +74,9 @@ if ( app.documents.length > 0 ) {
 	firstPoint.leftDirection = [300.0, 500.0];
 	firstPoint.rightDirection = [300.0, 500.0];
 	
+	// Modify the second point to investigate the direction
+	var secondPoint = polygonPath.pathPoints[1];
+	secondPoint.anchor = [300.0, 500.0];
 			
 	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
