@@ -69,7 +69,11 @@ if ( app.documents.length > 0 ) {
 	
 	// Modify the coordinates of the first anchor
 	// (300.0, 500.0) is the center of the drawing
+	// Modify the coordinates of the anchor and of its control points
 	firstPoint.anchor = [300.0, 500.0];
+	firstPoint.leftDirection = [300.0, 500.0];
+	firstPoint.rightDirection = [300.0, 500.0];
+	
 			
 	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
