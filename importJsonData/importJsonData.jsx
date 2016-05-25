@@ -75,8 +75,30 @@ if ( app.documents.length > 0 ) {
 	firstPoint.rightDirection = [300.0, 500.0];
 	
 	// Modify the second point to investigate the direction
-	var secondPoint = polygonPath.pathPoints[1];
-	secondPoint.anchor = [300.0, 500.0];
+	var point = polygonPath.pathPoints[2];
+	
+	// Create the centerPoint
+	var centerPointX = 300.0;
+	var centerPointY = 500.0;
+	
+	// Get the original Point
+	var origPointX = point.anchor[0];
+	var origPointY = point.anchor[1];
+	
+	// Calculate the adjustment ratio
+	var adjustment = 60.0 / 100.0;
+
+	// Calculate the adjusted vector from the center
+	var vectorX = (origPointX - centerPointX) * adjustment;
+	var vectorY = (origPointY - centerPointY) * adjustment;
+
+	// Calculate the new point
+	var newX = centerPointX + vectorX;
+	var newY = centerPointY + vectorY;
+	
+	point.anchor = [newX, newY];
+	point.leftDirection = [newX, newY];
+	point.rightDirection = [newX, newY];
 			
 	// Change all texts in the textLayer
 	var textObjects = textLayer.textFrames;
