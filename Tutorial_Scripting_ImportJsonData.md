@@ -366,22 +366,22 @@ Let's see how we can access those through code. Begin by getting the shape layer
 	var pathLayer = getLayerNamed(doc, "ShapeLayer")
 ```
 
-Then get to the path in this layer. From the Reference about the object *Layer*, we see that there is the property `pathItems` which we could use:
+Then dive into this layer and get the path. From the Reference about the *Layer* object, we can see that there is a property `pathItems` which we could use:
 
-**Step 12.2: Layer Reference: the pathItems property**  
+**Step 12.2: `Layer` Reference: the `pathItems` property**  
 ![Step 12.2](screenshots/import_step12_2_pathItems_reference.png)
 
-This will give us *PathItems*, a collection of *PathItem*(s). Studying the *PathItem* teaches us that there is read-only property `pathPoints`, returning a list, *PathPoints*.
+This will give us *PathItems*, a collection of *PathItem*(s). Studying the *PathItem* object teaches us that there is a read-only property `pathPoints`, returning a list, *PathPoints*.
 
-**Step 12.3: PathItem Reference: the pathPoints property**  
+**Step 12.3: `PathItem` Reference: the `pathPoints` property**  
 ![Step 12.2](screenshots/import_step12_3_pathPoints_reference.png)
 
-The *PathPoints* is a collection of multiple *PathPoint*(s). And if we study its reference we find just a few properties each point has, the `anchor` probably being most notable: the location of the point.
+The *PathPoints* is a collection of multiple *PathPoint*(s). And if we study its reference we find just a few properties each point has. The `anchor` property is probably being most notable: it is the position of the point.
 
-**Step 12.4: PathPoint Reference**  
+**Step 12.4: `PathPoint` Reference**  
 ![Step 12.4](screenshots/import_step12_4_pathPoint_reference.png)
 
-So now we know how to access these properties. Let's just get the first point of the polygon, and see if we can access some of its properties:
+So now we know how to exactly access these properties, and their child-properties. For testing purposes, and to get our hands dirty, let's just get the first point of the polygon, and see if we can access some of its properties. We start easy and try to get the *PathItem*:
 
 ```javascript
 	// Print the pathItems of the pathLayer
@@ -409,7 +409,9 @@ We have the *PathItem*. Now count its *pathPoints*:
 
 Yeah, **12** points! So far so good.
 
-Now let's just take the *first* point of those twelve and read some of its properties. Whenever you're trying to manipulate a bunch of things, it is often easier just to try it with one or a few first, to see how they hold up, before you attempt it on the lot.
+Now let's just take the *first* point of those twelve and read some of its properties.
+
+> Whenever you're trying to manipulate a bunch of things, it is often easier just to try it with one or a few first, to see how they hold up, before you attempt it on the lot.
 
 ```javascript
 	// For experimentation, get the first point
@@ -427,9 +429,9 @@ So, indeed the the `anchor` is a list of coordinates, and the `pointType` is a `
 
 ### 13. Investigate further: manipulate the points in the path
 
-Printing out stuff to the console is just one part of an investigation. If you really want to understand how stuff is working, you should take it apart, tweak it, poke it with a stick and see how it reacts. So let's.
+Printing out stuff to the console is just one part of an investigation. If you really want to understand how stuff is working, you should take it apart, tweak it, shake it, and poke it with a stick to see how it reacts. Let's do this!
 
-Manipulate the anchor. The documentation says the anchor should be an *array of 2 numbers*. So that's what we should set it to. I'm gonna set the coordinates of the anchor to the center of the shape, as if the value of this point would be 0:
+Manipulate the anchor. The documentation says the anchor is an *array of 2 numbers*. So that is what we should set it to: an array of 2 numbers. I'm going to set the position of the anchor to the center of the shape. (as if the value of this point from the data would be 0):
 
 ```javascript
 	// Modify the coordinates of the first anchor
@@ -483,7 +485,7 @@ Try to set the second point to the center as well.
 **Step 13.5: Manipulate the second point to learn about direction**  
 ![Step 13.5](screenshots/import_step13_5_manipulate_the_content.png)
 
-Nice, the direction is the the same as prefered, so we do not need to change something about that.
+*Nice!* The direction is the the same as prefered, so we do not need to change something about that.
 
 ### 14. Calculate the point we want to manipulate
 
@@ -498,15 +500,15 @@ Let's do an example calculation for manipulating a point on the polygon (*pointX
 
 The calculation for the manipulated point goes as follows:
 
-Take the offset of the original point from the center (in other words: *the vector* from the center to the original point):
+Take the *offset* of the original point from the center (in other words: **the vector** from the center to the original point):
 
 `[pointX - centerX, pointY - centerY]` or `[485 - 300, 610 - 500] = [185, 110]`
 
-Of this vector we want only `60%` or `(60 / 100)`, so lets multiply our vector by this `0.6`:
+Of this *vector* we want only `60%` or `(60 / 100)`, so lets *multiply* our vector by this `0.6`:
 
 `[185, 110] * 0.6 = [111, 66]`
 
-So the adjusted vector from the center is `[111, 66]`. Add back the coordinates of the center:
+So the *adjusted vector* from the center is `[111, 66]`. Add back the coordinates of the center:
 
 `[centerX + 111, centerY + 66]`. And there we have our adjusted point: `[411, 566]`
 
@@ -573,6 +575,12 @@ Then modify the calculation to use the actual value instead of the dummy `60`:
 ```
 
 That is it!
+
+Done
+
+Presto!
+
+----
 
 The final code of [`importJsonData.jsx`](importJsonData/importJsonData.jsx):
 

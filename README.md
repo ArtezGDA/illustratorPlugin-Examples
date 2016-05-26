@@ -26,7 +26,7 @@ Follow the [Scripting Tutorial to Export Each Layer as SVG](Tutorial_Scripting_E
 
 A Illustrator Javascript script to modify an exiting Illustrator document, using external data from a JSON file. The data in the JSON is visualized with a path element in Illustrator.
 
-![Finished work](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/import_step10_finished.png)
+![Finished work](https://github.com/ArtezGDA/illustratorMoutains/blob/master/screenshots/import_step15_final_result.png)
 
 Follow the [Scripting Tutorial to Import JSON Data into Illustrator](Tutorial_Scripting_ImportJsonData.md) to follow the steps I took in creating this.
 
