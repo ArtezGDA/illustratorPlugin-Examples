@@ -231,11 +231,11 @@ Actually, this is still sample data but for the purpose of drawing a graph it wi
 	"exampleArray": [
 		{
 			"month": "January",
-			"value": 12
+			"value": 32
 		},
 		{
 			"month": "February",
-			"value": 15
+			"value": 25
 		},
 ...
 ```
@@ -485,11 +485,212 @@ Try to set the second point to the center as well.
 
 Nice, the direction is the the same as prefered, so we do not need to change something about that.
 
-### 14.
+### 14. Calculate the point we want to manipulate
+
+Next, we need to calculate the `x`- and `y`-coordinate of the point that we want to manipulate. We know we have to set the *PathPoint*'s `anchor`, `leftDirection` and `rightDirection` to the new position. But what *is* this new position?
+
+**Step 14.0: Geometry of a manipulated point**  
+![Step 14.0](screenshots/import_step14_geometry_of_point.png)
+
+Let's do an example calculation for manipulating a point on the polygon (*pointX*, *pointY*). The center of the polygon is at `[300, 500]`, the original point at `[485, 610]` and the amount we want to set it to is `60`.
+
+> As you can see, if you would analyze the `arrayOfMonths.json`, is that all of its values are between `0` and `100`. That is on purpose to make this calculation easier. If your data has different ranges and extremes, you'll of course have to adjust the calculations accordingly.
+
+The calculation for the manipulated point goes as follows:
+
+Take the offset of the original point from the center (in other words: *the vector* from the center to the original point):
+
+`[pointX - centerX, pointY - centerY]` or `[485 - 300, 610 - 500] = [185, 110]`
+
+Of this vector we want only `60%` or `(60 / 100)`, so lets multiply our vector by this `0.6`:
+
+`[185, 110] * 0.6 = [111, 66]`
+
+So the adjusted vector from the center is `[111, 66]`. Add back the coordinates of the center:
+
+`[centerX + 111, centerY + 66]`. And there we have our adjusted point: `[411, 566]`
+
+**Step 14.1: In code it would something like this:**
+
+For testing, first create a variable `point`. (We'll reuse the variable `secondPoint`)
 
 ```javascript
+	var point = secondPoint;
 ```
 
+Then the calculation:
 
 ```javascript
+	// Create the centerPoint
+	var centerPointX = 300.0;
+	var centerPointY = 500.0;
+	
+	// Get the original Point
+	var origPointX = point.anchor[0];
+	var origPointY = point.anchor[1];
+	
+	// Calculate the adjustment ratio
+	var adjustment = 60.0 / 100.0;
+
+	// Calculate the adjusted vector from the center
+	var vectorX = (origPointX - centerPointX) * adjustment;
+	var vectorY = (origPointY - centerPointY) * adjustment;
+
+	// Calculate the new point
+	var newX = centerPointX + vectorX;
+	var newY = centerPointY + vectorY;
 ```
+
+Conclude with setting the `point`'s position:
+
+```javascript
+	point.anchor = [newX, newY];
+	point.leftDirection = [newX, newY];
+	point.rightDirection = [newX, newY];
+```
+
+### 15. Manipulate each point of the path
+
+Finally, we can put this all together. We put this code above (of step 14) inside the `for` loop which we already have to change the text.
+
+First get the actual point for each `i`:
+
+```javascript
+				var point = polygonPath.pathPoints[i];
+```
+
+Then modify the calculation to use the actual value instead of the dummy `60`:
+
+```diff
+				var origPointY = point.anchor[1];
+	
+				// Calculate the adjustment ratio
+-				var adjustment = 60.0 / 100.0;
++				var adjustment = thisMonth.value / 100.0;
+
+				// Calculate the adjusted vector from the center
+				var vectorX = (origPointX - centerPointX) * adjustment;
+```
+
+That is it!
+
+The final code of [`importJsonData.jsx`](importJsonData/importJsonData.jsx):
+
+```javascript
+// Import JSON Data into Illustrator
+
+// Returns the layer with the given name
+function getLayerNamed(doc, nameOfTheLayer) {
+	
+	// Only search the document if it is given
+	if ( doc != undefined ) {
+		
+		// Get the layer with the given name 
+		var layers = doc.layers;
+		if ( layers.length > 0 ) {
+			for (var i = 0; i < layers.length; i++) {
+				var layer = layers[i];
+			
+				if ( layer.name == nameOfTheLayer ) {
+					return layer;
+				}
+			}
+		}
+	}
+	return null;
+}
+
+// Returns an array of 12 months
+function getMonthsArray() {
+	// JSON reading
+	var fileToRead = File("~/Work/Artez/ArtezGDARepos/illustratorPlugin-Examples/importJsonData/arrayOfMonths.json");
+	var jsonData = null;
+	if ( fileToRead !== false ) {
+		// Open the file and read the content
+		fileToRead.open('r');
+		content = fileToRead.read();
+		// modify the content so it will set the jsonData variable
+		content = "jsonData = " + content + ";";
+		// eval is evil, but other tricks didn't seem to work
+		eval(content);
+		// Close the file
+		fileToRead.close();
+	}
+	return jsonData.exampleArray
+}
+
+
+// Get the active document
+if ( app.documents.length > 0 ) {
+	var doc = app.activeDocument;
+	
+	var textLayer = getLayerNamed(doc, "TextLayer");
+	var pathLayer = getLayerNamed(doc, "ShapeLayer")
+	
+	// Print the pathItems of the pathLayer
+	$.writeln(pathLayer.pathItems);
+	
+	// Print the first (and only) pathItem
+	$.writeln(pathLayer.pathItems[0]);
+	
+	// Make this PathItem into a variable
+	var polygonPath = pathLayer.pathItems[0];
+	
+	// Change all texts in the textLayer
+	var textObjects = textLayer.textFrames;
+	if ( textObjects.length > 0 ) {
+		
+		// Get the months
+		var months = getMonthsArray();
+		
+		// Check if the number of textObjects is equal to the number of months
+		if ( textObjects.length == months.length ) {
+			
+			for (var i = 0; i < textObjects.length; i++) {
+				var textObj = textObjects[textObjects.length - (i + 1)];
+			
+				// Change the text into the month
+				var thisMonth = months[i];
+				textObj.contents = thisMonth.month;
+				
+				// Modify each point
+				var point = polygonPath.pathPoints[i];
+	
+				// Create the centerPoint
+				var centerPointX = 300.0;
+				var centerPointY = 500.0;
+	
+				// Get the original Point
+				var origPointX = point.anchor[0];
+				var origPointY = point.anchor[1];
+	
+				// Calculate the adjustment ratio
+				var adjustment = thisMonth.value / 100.0;
+
+				// Calculate the adjusted vector from the center
+				var vectorX = (origPointX - centerPointX) * adjustment;
+				var vectorY = (origPointY - centerPointY) * adjustment;
+
+				// Calculate the new point
+				var newX = centerPointX + vectorX;
+				var newY = centerPointY + vectorY;
+				
+				// Set the anchor and its control points to the new point
+				point.anchor = [newX, newY];
+				point.leftDirection = [newX, newY];
+				point.rightDirection = [newX, newY];
+				
+			}
+		} else {
+			
+			// If the number of the texts is not equal to the number of months, alert the user
+			alert("the number of textFrames and number of months in the JSON do not match.");
+		}
+	}
+}
+``` 
+
+If you have Illustrator run this code on the document, it will result in this.
+
+**Step 15.0: Final result of the document modified by the data**  
+![Step 15.0](screenshots/import_step15_final_result.png)

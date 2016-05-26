@@ -95,7 +95,8 @@ if ( app.documents.length > 0 ) {
 				// Calculate the new point
 				var newX = centerPointX + vectorX;
 				var newY = centerPointY + vectorY;
-	
+				
+				// Set the anchor and its control points to the new point
 				point.anchor = [newX, newY];
 				point.leftDirection = [newX, newY];
 				point.rightDirection = [newX, newY];
